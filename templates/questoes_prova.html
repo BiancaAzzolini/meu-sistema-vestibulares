@@ -1,0 +1,255 @@
+{% block content %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questões Provas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+<style>
+    .btn-correto, .btn-errado {
+        font-size: 20px;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        margin: 5px;
+    }
+    .btn-correto { background: green; color: white; }
+    .btn-errado { background: red; color: white; }
+    .correto { color: green; font-size: 18px; }
+    .errado { color: red; font-size: 18px; }
+
+    body {
+        background-color: #121212;
+        color: #ffffff;
+    }
+
+    a, h1, h2, h3, h4, h5, h6, label {
+        color: #ffffff;
+    }
+
+    input, textarea, select {
+        background-color: #1e1e1e;
+        color: #ffffff;
+        border: 1px solid #444;
+    }
+
+    button {
+        background-color: #333;
+        color: #ffffff;
+        border: none;
+    }
+
+    button:hover {
+        background-color: #555;
+    }
+
+    #titulo {
+        color: #8879ed;
+    }
+
+    label {
+        color: #d9d4f9;
+    }
+
+    #imp {
+        background-color: #121212;
+        border-color: #555;
+        color: #bbbbbb;
+    }
+
+    #botao {
+        background-color: #483D8B;
+        border-color: #7b6be5;
+    }
+
+    #voltar {
+        background-color: #beb4ff;
+        border-color: #483D8B;
+        color: #232323;
+    }
+
+    #seta {
+        background-color: #121212;
+        color: #a597ff;
+    }
+
+    .custom-select {
+        background-color: #121212;
+        border-color: #555;
+        color: #bbbbbb;
+    }
+
+    option{
+        background-color: #121212;
+        border-color: #555;
+        color: #bbbbbb;
+    }
+</style>
+
+<h1 class="text-center" id="titulo">Adicionar Questão</h1>
+<form method="POST" action="{{ url_for('questoes_prova', prova_id=prova.id) }}">
+    <div class="mb-3">
+        <label class="form-label" id="lab">Número da Questão:</label>
+        <input type="number" name="numero" class="form-control" id="imp" required>
+    </div>
+
+    <table>
+        <tr>
+            <td>
+                <div class="mb-3">
+                    <label class="form-label" id="lab">Matéria:</label>
+                    <select id="materiaSelect" name="materia" class="form-control custom-select" required>
+                        <option value="empty"></option>
+                        <option value="LinguaPortuguesa">Língua Portuguesa</option>
+                        <option value="Literatura">Literatura</option>
+                        <option value="LinguaEstrangeira">Língua Estrangeira</option>
+                        <option value="Historia">História</option>
+                        <option value="Geografia">Geografia</option>
+                        <option value="Matematica">Matemática</option>
+                        <option value="Quimica">Química</option>
+                        <option value="Fisica">Física</option>
+                        <option value="Biologia">Biologia</option>
+                        <option value="Redacao">Redação</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="mb-3">
+                    <label class="form-label" id="lab">Assunto:</label>
+                    <select id="assuntoSelect" name="assunto" class="form-control custom-select">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="mb-3">
+                    <label class="form-label" id="lab">Pontuação*:</label>
+                    <input type="number" name="pont" class="form-control" id="imp">
+                </div>
+            </td>
+            <td>
+                <div class="mb-3">
+                    <label class="form-label" id="lab">Total*:</label>
+                    <input type="number" name="tot" class="form-control" id="imp">
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <script>
+        // Dicionário com os assuntos correspondentes a cada matéria
+        const assuntosPorMateria = {
+            LinguaPortuguesa: ["port"],
+            Literatura: ["lit"],
+            LinguaEstrangeira: ["est"],
+            Historia: ["hist"],
+            Geografia: ["geo"],
+            Matematica: ["mat"],
+            Quimica: ["quim"],
+            Fisica: ["fis"],
+            Biologia: ["bio"],
+            Redacao: ["reda"]
+        };
+    
+        // Capturando os selects
+        const materiaSelect = document.getElementById("materiaSelect");
+        const assuntoSelect = document.getElementById("assuntoSelect");
+    
+        // Função para atualizar os assuntos conforme a matéria selecionada
+        materiaSelect.addEventListener("change", function() {
+            console.log("Matéria selecionada:", materiaSelect.value);
+
+            const materiaEscolhida = materiaSelect.value;
+            assuntoSelect.innerHTML = "<option value=''></option>"; // Resetando as opções
+            
+            if (materiaEscolhida in assuntosPorMateria) {
+                assuntosPorMateria[materiaEscolhida].forEach(assunto => {
+                    const option = document.createElement("option");
+                    option.value = assunto.toLowerCase().replace(" ", "_"); // Criando um valor sem espaços
+                    option.textContent = assunto;
+                    assuntoSelect.appendChild(option);
+                });
+            }
+        });
+    </script>
+
+    <div class="mb-3">
+        <select name="cor">
+            <option value="com_certeza" title="com certeza">🟢</option>
+            <option value="chute" title="chute">🔵</option>
+            <option value="talvez" title="talvez">🟡</option>
+            <option value="nem_ideia" title="nem ideia">🔴</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" name="status" value="correto" class="btn-correto">✔</button>
+        <button type="submit" name="status" value="errado" class="btn-errado">✖</button>
+    </div>
+</form>
+
+<h2 class="text-center" id="titulo">Questões:</h2>
+
+<div class="accordion" id="provasAccordion">
+    {% for questao in questoes %}
+        <div class="accordion-item" id="imp">
+            <h2 class="accordion-header" id="heading{{ questao.id }}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ questao.id }}" aria-expanded="false" aria-controls="collapse{{ questao.id }}" id="seta">
+                    <table>
+                        <tr>
+                            Questão {{ questao.numero }} 
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            {% if questao.cor == 'com_certeza' %}
+                                <h5 class="com_certeza">🟢</h5>
+                            {% elif questao.cor == 'chute' %}
+                                <h5 class="chute">🔵</h5>
+                            {% elif questao.cor == 'talvez' %}
+                                <h5 class="talvez">🟡</h5>
+                            {% elif questao.cor == 'nem_ideia' %}
+                                <h5 class="nem_ideia">🔴</h5>
+                            {% endif %}
+
+                            {% if questao.status == 'correto' %}
+                                <h5 class="correto">✔</h5>
+                            {% else %}
+                                <h5 class="errado">✖</h5>
+                            {% endif %}
+                        </tr>
+                    </table>
+                </button>
+            </h2>
+            <div id="collapse{{ questao.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ questao.id }}" data-bs-parent="#provasAccordion">
+                <div class="accordion-body">
+                    <table>
+                        <tr>
+                            <td><b>Matéria:</b> {{ questao.materia }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Assunto:</b> {{ questao.assunto or "-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ questao.pont or "" }}/{{ questao.tot or "" }}</td>
+                        </tr>
+                    </table>
+                    <form method="POST" action="{{ url_for('excluir_questao_pr', id=questao.id, prova_id=prova.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="text-center mt-4">
+    <a href="/provas" class="btn btn-secondary" id="voltar">Voltar para a Provas</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}

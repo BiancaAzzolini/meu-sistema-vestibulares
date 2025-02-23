@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estatísticas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        a, h1, h2, h3, h4, h5, h6, label {
+            color: #ffffff;
+        }
+
+        input, textarea, select {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: 1px solid #444;
+        }
+
+        button {
+            background-color: #333;
+            color: #ffffff;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #titulo {
+            color: #8879ed;
+        }
+
+        #lab {
+            color: #d9d4f9;
+        }
+
+        #imp {
+            background-color: #121212;
+            border-color: #555;
+            color: #bbbbbb;
+        }
+
+        #botao {
+            background-color: #483D8B;
+            border-color: #7b6be5;
+        }
+
+        #voltar {
+            background-color: #beb4ff;
+            border-color: #483D8B;
+            color: #232323;
+        }
+
+        #seta {
+            background-color: #121212;
+            color: #a597ff;
+        }
+
+        #seta1 {
+            background-color: #121212;
+            color:#beb4ff;
+        }
+    </style>
+
+    <h1 class="text-center" id="titulo">Estatísticas de Desempenho</h1>
+
+    <div class="accordion" id="simuladosAccordion">
+        {% for simulado, materias in estatisticas_simulados.items() %}
+        <div class="accordion-item" id="imp">
+            <h2 class="accordion-header" id="headingSimulado{{ loop.index }}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSimulado{{ loop.index }}" aria-expanded="false" aria-controls="collapseSimulado{{ loop.index }}" id="seta">
+                    <b>{{ simulado }}</b>
+                </button>
+            </h2>
+            <div id="collapseSimulado{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="headingSimulado{{ loop.index }}" data-bs-parent="#simuladosAccordion">
+                <div class="accordion-body">
+                    <div class="accordion" id="materiasAccordion{{ loop.index }}">
+                        {% for materia, assuntos in materias.items() %}
+                        <div class="accordion-item" id="imp">
+                            <h2 class="accordion-header" id="headingMateria{{ loop.index }}_{{ loop.index0 }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMateria{{ loop.index }}_{{ loop.index0 }}" aria-expanded="false" aria-controls="collapseMateria{{ loop.index }}_{{ loop.index0 }}" id="seta1">
+                                    <b>{{ materia }}</b>
+                                </button>
+                            </h2>
+                            <div id="collapseMateria{{ loop.index }}_{{ loop.index0 }}" class="accordion-collapse collapse" aria-labelledby="headingMateria{{ loop.index }}_{{ loop.index0 }}" data-bs-parent="#materiasAccordion{{ loop.index }}">
+                                <div class="accordion-body">
+                                    <ul>
+                                        {% for assunto, dados in assuntos.items() %}
+                                            <li>
+                                                <strong>{{ assunto }}</strong> - Acertos: {{ dados.acertos }} / {{ dados.total }}
+                                                ({{ (dados.acertos / dados.total * 100)|round(2) }}%)
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Accordion para estatísticas gerais -->
+    <div class="accordion mt-4" id="geralAccordion">
+        <div class="accordion-item" id="imp">
+            <h2 class="accordion-header" id="headingGeral">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGeral" aria-expanded="false" aria-controls="collapseGeral" id="seta">
+                    <b>Estatísticas Gerais</b>
+                </button>
+            </h2>
+            <div id="collapseGeral" class="accordion-collapse collapse" aria-labelledby="headingGeral">
+                <div class="accordion-body">
+                    <ul>
+                        {% for materia, assuntos in estatisticas_gerais.items() %}
+                            <li><strong>{{ materia }}</strong>
+                                <ul>
+                                    {% for assunto, dados in assuntos.items() %}
+                                        <li>{{ assunto }} - Acertos: {{ dados.acertos }} / {{ dados.total }}
+                                            ({{ (dados.acertos / dados.total * 100)|round(2) }}%)
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/simulados" class="btn btn-secondary" id="voltar">Voltar para Simulados</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

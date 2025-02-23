@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Simulados</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        a, h1, h2, h3, h4, h5, h6, label {
+            color: #ffffff;
+        }
+
+        input, textarea, select {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: 1px solid #444;
+        }
+
+        button {
+            background-color: #333;
+            color: #ffffff;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #titulo {
+            color: #8879ed;
+        }
+
+        #lab {
+            color: #d9d4f9;
+        }
+
+        #imp {
+            background-color: #121212;
+            border-color: #555;
+            color: #bbbbbb;
+        }
+
+        #botao {
+            background-color: #483D8B;
+            border-color: #7b6be5;
+        }
+
+        #voltar {
+            background-color: #beb4ff;
+            border-color: #483D8B;
+            color: #232323;
+        }
+
+        #seta {
+            background-color: #121212;
+            color: #a597ff;
+        }
+    </style>
+
+    <h1 class="text-center" id="titulo">Editar Simulado</h1>
+
+    <form method="POST" class="mb-4">
+        <div class="mb-3">
+            <label class="form-label" id="lab">Nome do Simulado:</label>
+            <input type="text" name="nome" class="form-control" id="imp" value="{{ simulado.nome }}" required>
+        </div>
+
+        <div class="mb-3">
+            <table>
+                <tr>
+                    <td><label class="form-label" id="lab">Pontuação:</label></td>
+                    <td><label class="form-label" id="lab">Total:</label></td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="pontuacao" class="form-control" id="imp" value="{{ simulado.pontuacao }}"></td>
+                    <td><input type="number" name="total" class="form-control" id="imp" value="{{ simulado.total }}"></td>
+                </tr>
+            </table> 
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="botao">Salvar Alterações</button>
+    </form>
